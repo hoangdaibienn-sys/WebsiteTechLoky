@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: techpulse-v2
+    env: node
+    buildCommand: npm install
+    startCommand: node backend.js
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
