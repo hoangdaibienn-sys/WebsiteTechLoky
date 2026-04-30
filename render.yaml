@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: techpulse-v2
+    env: node
+    region: singapore
+    nodeVersion: 20
+    buildCommand: npm install --build-from-source
+    startCommand: node backend.js
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
