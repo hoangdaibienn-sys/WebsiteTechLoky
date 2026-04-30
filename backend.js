@@ -656,6 +656,21 @@ setInterval(runCleanup, 24 * 60 * 60 * 1000);
 // START SERVER
 // ============================================================
 
+// ── KEEP-ALIVE: tự ping mỗi 12 phút để free tier không sleep ──
+const http = require('http');
+const https = require('https');
+function keepAlive() {
+  const url = process.env.RENDER_EXTERNAL_URL;
+  if (!url) return; // chỉ chạy trên Render
+  const mod = url.startsWith('https') ? https : http;
+  mod.get(url + '/api/articles?limit=1', (res) => {
+    console.log('[KeepAlive] ping OK', res.statusCode);
+  }).on('error', (e) => {
+    console.log('[KeepAlive] ping fail:', e.message);
+  });
+}
+setInterval(keepAlive, 12 * 60 * 1000);
+
 app.listen(PORT, () => {
   console.log(`[TechPulse V2] Server running on http://localhost:${PORT}`);
   console.log('[DB] Database: ' + DB_PATH);
